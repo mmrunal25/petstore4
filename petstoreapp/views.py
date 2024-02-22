@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.db.models import Q 
 from .models import Pet
 from .forms import PetForm
 from django.db.models import Q
@@ -12,7 +13,7 @@ def pets_list(request):
     return render(request, 'petstoreapp/pets_list.html', {'pets': pets})
     #search_query = request.GET.get('search', '')
     #pets = Pet.objects.filter(name__icontains=search_query)
-    #return render (request, 'petstoreapp/pet_list.html', {'pets' : pets , 'search_query': search_query})
+    #return render(request, 'petstoreapp/pets_list.html', {'pets': pets, 'search_query': search_query})
 
 def pet_create(request):
     if request.method == 'POST':
@@ -23,8 +24,9 @@ def pet_create(request):
     else:
         form = PetForm()
     return render(request, 'petstoreapp/pet_create.html', {'form': form})
+
 def search_results(request):
     search_query = request.GET.get('search', '')
-    #pets = Pet.objects.filter(name__icontains =search_query)
+    #pets = Pet.objects.filter(name__icontains=search_query)
     pets = Pet.objects.filter(Q(name__icontains=search_query) | Q(breed__icontains=search_query))
     return render(request, 'petstoreapp/search_results.html', {'pets': pets, 'search_query': search_query})
